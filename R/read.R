@@ -104,6 +104,7 @@ read <- function(file = file.choose(), version = NA, coef = rep(1,length(file)),
     cat(' - MACCITY\n')
     cat(' - FFDAS\n')
     cat(' - ODIAC\n')
+    cat(' - ODIAC-tiff\n')
     cat(' - ACES\n')
     cat(' - VULCAN-y (annual)\n')
     cat(' - VULCAN-h (hourly)\n')
