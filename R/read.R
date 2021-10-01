@@ -628,6 +628,36 @@ read <- function(file = file.choose(), version = NA, coef = rep(1,length(file)),
     }
   }                                            # nocov end
 
+  if(version == "ODIAC-tiff"){                       # nocov start
+
+    test <- rgdal::readGDAL(file[1])
+    var <- raster(test)
+    var[is.na(var[])] <- 0
+
+    # UNIT conversion
+    # initial == units: tonne C/km^2/month
+    # final == units: g/m^2/sec
+
+    # 'tonne C/km^2/month' to 'gm/m^2/month'
+    var = 12.0107 * var
+    # 'gm/m^2/month' to 'g/m^2/sec'
+    var = var / (30.41667* 24 * 60 * 60)
+
+    if(verbose)
+      cat(paste0("reading",
+                 " ",version,
+                 " emissions for ODIAC-tiff, output unit is g/m^2/sec  ...\n"))
+
+    if(as_raster){
+      return(var)
+    }else{
+      a <- raster_to_ncdf(var)
+      if(dim(a)[3] == 1) a <- a[,,1,drop = TRUE]
+      return(a)
+    }
+  }                                            # nocov end
+
+
   if(version == "ACES"){                       # nocov start
     ed   <- ncdf4::nc_open(file[1])
     name <- names(ed$var)
